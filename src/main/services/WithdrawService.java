@@ -26,9 +26,11 @@ public class WithdrawService {
         withdrawal = primaryNote50(requestModel);
 
         if (!withdrawal.isValidRequest()) {
+            int maxFifties = withdrawal.getFifties();
             withdrawal = primaryNote20(requestModel);
+
             if (!withdrawal.isValidRequest()) {
-                withdrawal = iterativeMethod(requestModel);
+                withdrawal = iterativeMethod(requestModel,maxFifties);
             }
         }
 
@@ -44,10 +46,10 @@ public class WithdrawService {
         if (fiftiesRemainder != 0) {
             twentiesInRequest = numberOfAvailableNotesInRequestedAmount(fiftiesRemainder, 20, requestModel.getTwentiesAvailable());
         }
+        withdrawal.setTwenties(twentiesInRequest);
+        withdrawal.setFifties(fiftiesInRequest);
 
         if (fiftiesInRequest * 50 + twentiesInRequest * 20 == requestModel.getRequestAmount()) {
-            withdrawal.setTwenties(twentiesInRequest);
-            withdrawal.setFifties(fiftiesInRequest);
             withdrawal.setValidRequest(true);
         } else {
             withdrawal.setValidRequest(false);
@@ -69,16 +71,18 @@ public class WithdrawService {
         return withdrawal;
     }
 
-    private WithdrawalModel iterativeMethod(RequestModel requestModel) {
+    private WithdrawalModel iterativeMethod(RequestModel requestModel,int fifties) {
         WithdrawalModel withdrawal = new WithdrawalModel();
         int x = 1;
         withdrawal.setValidRequest(false);
+        int trial = fifties;
 
-        while (!withdrawal.isValidRequest() && (x*50) < requestModel.getRequestAmount()) {
-            int remainder = requestModel.getRequestAmount() - (x * 50);
+        while (!withdrawal.isValidRequest() && trial > 0) {
+            trial = fifties-x;
+            int remainder = requestModel.getRequestAmount() - (trial * 50);
             int twentiesInRequest = numberOfAvailableNotesInRequestedAmount(remainder, 20, requestModel.getTwentiesAvailable());
-            if (x * 50 + twentiesInRequest * 20 == requestModel.getRequestAmount()){
-                withdrawal.setFifties(x);
+            if (trial * 50 + twentiesInRequest * 20 == requestModel.getRequestAmount()) {
+                withdrawal.setFifties(trial);
                 withdrawal.setTwenties(twentiesInRequest);
                 withdrawal.setValidRequest(true);
             } else {

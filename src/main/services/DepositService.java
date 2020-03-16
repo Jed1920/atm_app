@@ -10,13 +10,13 @@ public class DepositService {
         this.input = input;
     }
 
-    public int depositTwenties(int numberTwenties){
+    public int depositTwenties(int numberTwenties) {
         System.out.println("Enter number of $20 to deposit");
         int numberNewTwenties = Integer.parseInt(input.nextLine());
         return numberNewTwenties + numberTwenties;
     }
-    public int depositFifties(int numberFifties){
 
+    public int depositFifties(int numberFifties) {
         System.out.println("Enter number of $50 to deposit");
         int numberNewFifties = Integer.parseInt(input.nextLine());
         return numberNewFifties + numberFifties;

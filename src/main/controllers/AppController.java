@@ -22,6 +22,7 @@ public class AppController {
     }
 
     public void controller(){
+        int threshold = 2;
         System.out.println("Enter number of $20 notes available");
         int numberTwenties = Integer.parseInt(input.nextLine());
         System.out.println("Enter number of $50 notes available");
@@ -42,10 +43,16 @@ public class AppController {
                 case "Withdraw":
                     WithdrawalModel withdrawal = withdrawService.withdraw(numberTwenties,numberFifties);
                     if(withdrawal.isValidRequest()){
-                        numberTwenties = numberTwenties - withdrawal.getTwenties();
-                        numberFifties = numberFifties - withdrawal.getFifties();
                         System.out.println(String.format("Number of $20 = %s", withdrawal.getTwenties()));
                         System.out.println(String.format("Number of $50 = %s", withdrawal.getFifties()));
+                        numberTwenties = numberTwenties - withdrawal.getTwenties();
+                        numberFifties = numberFifties - withdrawal.getFifties();
+                        if(numberTwenties <= threshold) {
+                            System.out.println("Number of $20 notes is at or below the threshold");
+                        }
+                        if(numberFifties <= threshold) {
+                            System.out.println("Number of $50 notes is at or below the threshold");
+                        }
                     } else {
                         System.out.println("Amount not available with current available denominations");
                     }
@@ -54,6 +61,8 @@ public class AppController {
                 case "Total":
                     totalService.balance(numberTwenties,numberFifties);
                     break;
+                default:
+                    System.out.println("Please choose from the available options");
             }
         }
     }
