@@ -42,6 +42,8 @@ public class AppController {
                 case "Withdraw":
                     WithdrawalModel withdrawal = withdrawService.withdraw(numberTwenties,numberFifties);
                     if(withdrawal.isValidRequest()){
+                        numberTwenties = numberTwenties - withdrawal.getTwenties();
+                        numberFifties = numberFifties - withdrawal.getFifties();
                         System.out.println(String.format("Number of $20 = %s", withdrawal.getTwenties()));
                         System.out.println(String.format("Number of $50 = %s", withdrawal.getFifties()));
                     } else {
@@ -51,7 +53,6 @@ public class AppController {
 
                 case "Total":
                     totalService.balance(numberTwenties,numberFifties);
-                    System.out.print(numberTwenties);
                     break;
             }
         }

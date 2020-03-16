@@ -18,7 +18,7 @@ public class WithdrawService {
         requestModel.setTwentiesAvailable(numberTwenties);
         requestModel.setFiftiesAvailable(numberFifties);
 
-        WithdrawalModel withdrawal = new WithdrawalModel();
+        WithdrawalModel withdrawal;
 
         System.out.println("Enter desired amount in $");
         requestModel.setRequestAmount(Integer.parseInt(input.nextLine()));
@@ -27,6 +27,9 @@ public class WithdrawService {
 
         if (!withdrawal.isValidRequest()) {
             withdrawal = primaryNote20(requestModel);
+            if (!withdrawal.isValidRequest()) {
+                withdrawal = iterativeMethod(requestModel);
+            }
         }
 
         return withdrawal;
@@ -36,8 +39,7 @@ public class WithdrawService {
         WithdrawalModel withdrawal = new WithdrawalModel();
         int twentiesInRequest = 0;
         int fiftiesInRequest = numberOfAvailableNotesInRequestedAmount(requestModel.getRequestAmount(), 50, requestModel.getFiftiesAvailable());
-        int fiftiesRemainder = requestModel.getRequestAmount() % 50;
-        System.out.println(fiftiesRemainder);
+        int fiftiesRemainder = requestModel.getRequestAmount() - (fiftiesInRequest * 50);
 
         if (fiftiesRemainder != 0) {
             twentiesInRequest = numberOfAvailableNotesInRequestedAmount(fiftiesRemainder, 20, requestModel.getTwentiesAvailable());
@@ -63,6 +65,25 @@ public class WithdrawService {
             withdrawal.setValidRequest(true);
         } else {
             withdrawal.setValidRequest(false);
+        }
+        return withdrawal;
+    }
+
+    private WithdrawalModel iterativeMethod(RequestModel requestModel) {
+        WithdrawalModel withdrawal = new WithdrawalModel();
+        int x = 1;
+        withdrawal.setValidRequest(false);
+
+        while (!withdrawal.isValidRequest() && (x*50) < requestModel.getRequestAmount()) {
+            int remainder = requestModel.getRequestAmount() - (x * 50);
+            int twentiesInRequest = numberOfAvailableNotesInRequestedAmount(remainder, 20, requestModel.getTwentiesAvailable());
+            if (x * 50 + twentiesInRequest * 20 == requestModel.getRequestAmount()){
+                withdrawal.setFifties(x);
+                withdrawal.setTwenties(twentiesInRequest);
+                withdrawal.setValidRequest(true);
+            } else {
+                x++;
+            }
         }
         return withdrawal;
     }
