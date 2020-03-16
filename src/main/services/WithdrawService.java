@@ -71,14 +71,14 @@ public class WithdrawService {
         return withdrawal;
     }
 
-    private WithdrawalModel iterativeMethod(RequestModel requestModel,int fifties) {
+    private WithdrawalModel iterativeMethod(RequestModel requestModel,int maxFifties) {
         WithdrawalModel withdrawal = new WithdrawalModel();
         int x = 1;
         withdrawal.setValidRequest(false);
-        int trial = fifties;
+        int trial = maxFifties;
 
         while (!withdrawal.isValidRequest() && trial > 0) {
-            trial = fifties-x;
+            trial = maxFifties-x;
             int remainder = requestModel.getRequestAmount() - (trial * 50);
             int twentiesInRequest = numberOfAvailableNotesInRequestedAmount(remainder, 20, requestModel.getTwentiesAvailable());
             if (trial * 50 + twentiesInRequest * 20 == requestModel.getRequestAmount()) {

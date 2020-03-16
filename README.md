@@ -8,3 +8,6 @@ Deposit – Input the number of $20 and $50 notes to be deposited into the atm
 Withdraw – Input the amount desired and it will return the number of $50 and $20 denominations that can make that sum, prioritizing the use of $50 notes first and then $20
 Total – Return the total number of $20 and $50 notes and the total balance 
 
+Futher work 
+Validation on inputs from the user to catch the exceptions if wrong type is entered 
+Unit tests to ensure functions continue to work as expected 
