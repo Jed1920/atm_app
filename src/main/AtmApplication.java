@@ -1,11 +1,18 @@
 package main;
 
+import main.services.DepositService;
+import main.services.TotalService;
+import main.services.WithdrawService;
+
 import java.util.Scanner;
 
 public class AtmApplication {
 
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
+        DepositService depositService = new DepositService();
+        WithdrawService withdrawService = new WithdrawService();
+        TotalService totalService = new TotalService();
 
         System.out.println("Enter number of $20 notes available");
         int numberTwenties = Integer.parseInt(input.nextLine());
@@ -20,23 +27,13 @@ public class AtmApplication {
 
             switch (service) {
                 case "Deposit":
-                    System.out.println("Enter number of $20 to deposit");
-                    int numberNewTwenties = Integer.parseInt(input.nextLine());
-                    numberTwenties = numberNewTwenties + numberTwenties;
-
-                    System.out.println("Enter number of $50 to deposit");
-                    int numberNewFifties = Integer.parseInt(input.nextLine());
-                    numberFifties = numberNewFifties + numberFifties;
+                    depositService.deposit(numberTwenties,numberFifties,input);
                     break;
                 case "Withdraw":
-                    System.out.println("Enter desired amount in $");
-                    int requestedAmount = Integer.parseInt(input.nextLine());
+                    withdrawService.withdraw(numberTwenties,numberFifties,input);
                     break;
                 case "Total":
-                    System.out.println(String.format("Number of $20 notes: %d", numberTwenties));
-                    System.out.println(String.format("Number of $50 notes: %d", numberFifties));
-                    int total = numberFifties * 50 + numberTwenties * 20;
-                    System.out.println(String.format("Total: $%d", total));
+                    totalService.balance(numberTwenties,numberFifties);
                     break;
             }
         }
